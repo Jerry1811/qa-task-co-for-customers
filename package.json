@@ -1,0 +1,12 @@
+{
+  "name": "qa-task-cocus",
+  "scripts": {
+    "test": "cypress open"
+  },
+  "author": "Jeremiah Hukpati",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "9.6.0",
+    "eslint-plugin-cypress": "2.12.1"
+  }
+}
