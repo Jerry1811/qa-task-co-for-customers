@@ -13,7 +13,11 @@ devices.map((device) => {
       cy.viewport(w, h)
     })
 
-    it('Visit flights page', () => {
+    it(`Book a flight - Logged out @@ ${device.name}`, () => {
+      cy.visit(routes.flights)
+    })
+
+    it(`Book a flight - Logged in @@ ${device.name}`, () => {
       cy.visit(routes.flights)
     })
   })
