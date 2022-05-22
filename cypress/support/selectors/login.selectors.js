@@ -1,6 +1,5 @@
-const email_field = 'input[type=email]'
-const password_field = 'input[type=password]'
-const login_button = 'button[type=submit]'
-const login_error_message = '.alert-danger'
-
-export { email_field, password_field, login_button, login_error_message }
+export const email_field = 'input[type=email]'
+export const password_field = 'input[type=password]'
+export const login_button = 'button[type=submit]'
+export const login_error_message = '.alert-danger'
+export const signup_button = 'Signup'

@@ -2,11 +2,13 @@ import users, { INVALID_LOGIN_ERROR_MESSAGE } from '../../fixtures/login.data'
 import { routes } from '../_helpers/routes'
 import { devices } from '../_helpers/devices'
 import {
-  email_field,
-  password_field,
-  login_button,
   login_error_message,
+  signup_button,
 } from '../../support/selectors/login.selectors'
+import {
+  reset_password_modal_title,
+  reset_password,
+} from '../../support/selectors/resetPassword.selectors'
 
 const { validUser, invalidUser } = users
 
@@ -20,16 +22,14 @@ devices.map((device) => {
 
     beforeEach(() => {
       cy.viewport(w, h)
-      cy.intercept(routes.login).as('login')
-      cy.intercept(routes.dashboard).as('dashboard')
-      cy.intercept(routes.failed_login).as('loginFailed')
-      cy.visit('/login')
+      cy.visit(routes.login)
     })
 
     it('Login with valid email and password', () => {
-      cy.get(email_field).first().type(validUser.email)
-      cy.get(password_field).type(validUser.password)
-      cy.get(login_button).contains('Login').click()
+      cy.intercept(routes.login).as('login')
+      cy.intercept(routes.dashboard).as('dashboard')
+
+      cy.login(validUser.email, validUser.password)
       cy.wait(['@login', '@dashboard'])
       cy.location().should((loc) => {
         expect(loc.pathname).to.equal(routes.dashboard)
@@ -37,10 +37,9 @@ devices.map((device) => {
     })
 
     it('Login with invalid email and password', () => {
-      cy.get(email_field).first().type(invalidUser.email)
-      cy.get(password_field).type(invalidUser.password)
-      cy.get(login_button).contains('Login').click()
+      cy.intercept(routes.failed_login).as('loginFailed')
 
+      cy.login(invalidUser.email, invalidUser.password)
       cy.wait('@loginFailed').then(() => {
         cy.get(login_error_message)
           .should('be.visible')
@@ -49,6 +48,22 @@ devices.map((device) => {
       cy.location().should((loc) => {
         expect(loc.pathname).to.equal(routes.failed_login)
       })
+    })
+
+    it('Clicking signup button should navigate user to signup page', () => {
+      cy.contains(signup_button).click({ force: true })
+      cy.location().should((loc) => {
+        expect(loc.pathname).to.equal(routes.signup)
+      })
+    })
+
+    it('Reset password modal should pop-up when reset password link is clicked', () => {
+      cy.get(reset_password_modal_title).should('not.be.visible')
+      cy.contains(reset_password)
+        .click({ waitForAnimations: false })
+        .then(() => {
+          cy.get(reset_password_modal_title).should('be.visible')
+        })
     })
   })
 })
