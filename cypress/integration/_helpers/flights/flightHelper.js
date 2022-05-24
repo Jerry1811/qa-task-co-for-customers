@@ -8,19 +8,20 @@ import {
   search,
   to_destination,
   book_now_button,
+  search_autocomplete_result,
 } from '../../../support/selectors/flights.selectors'
 
 export const searchFlight = () => {
   cy.get(flying_from)
     .type('cairo')
-    .get('.autocomplete-result')
+    .get(search_autocomplete_result)
     .eq(0)
     .contains('Cairo, Egypt')
     .click()
 
   cy.get(to_destination)
     .type('ankara')
-    .get('.autocomplete-result')
+    .get(search_autocomplete_result)
     .eq(0)
     .contains('Ankara, Turkey')
     .click()
